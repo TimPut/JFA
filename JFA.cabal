@@ -21,7 +21,7 @@ source-repository head
 
 common common-options
   build-depends:       base ^>= 4.13.0.0
-  
+                     , vector
   ghc-options:         -Wall
                        -Wcompat
                        -Widentities
@@ -49,27 +49,5 @@ executable JFA
   hs-source-dirs:      app
   main-is:             Main.hs
   build-depends:       JFA
-  ghc-options:         -threaded
-                       -rtsopts
-                       -with-rtsopts=-N
-
-test-suite JFA-test
-  import:              common-options
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-  main-is:             Spec.hs
-  build-depends:       JFA
-  ghc-options:         -threaded
-                       -rtsopts
-                       -with-rtsopts=-N
-
-benchmark JFA-benchmark
-  import:              common-options
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      benchmark
-  main-is:             Main.hs
-  build-depends:       gauge
-                     , JFA
-  ghc-options:         -threaded
-                       -rtsopts
-                       -with-rtsopts=-N
+                     , bmp
+                     , bytestring
