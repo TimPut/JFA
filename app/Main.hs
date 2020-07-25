@@ -14,9 +14,18 @@ main = do
         f' n = round $ (255/ fromIntegral w) * sqrt(fromIntegral n)
         vs = [(511,0),(400,200),(400,511),(511,511)]
         vs' = fmap (\a -> (256 + (round $ 100 * cos a), 256 + (round $ 100 * sin a))) [0,1..2*pi]
-    let j = concat
+        result = V.toList $ jfa (vs ++ vs') w h
+        voronoi = concat
+            . fmap (\(x,y,d) -> [f x, f y, 0, 0])
+            $ result
+        distanceField = concat
             . fmap (\(x,y,d) -> let d' = f' d in [d', d', d', 0])
-            . V.toList $ jfa (vs ++ vs') w h
-    let rgba = BS.pack j
-    let bmp  = packRGBA32ToBMP24 w h rgba
-    writeBMP "voro.bmp" bmp
+            $ result
+            
+    let drgba = BS.pack distanceField
+    let distancebmp  = packRGBA32ToBMP24 w h drgba
+    writeBMP "distField.bmp" distancebmp
+
+    let vrgba = BS.pack voronoi
+    let voronoibmp  = packRGBA32ToBMP24 w h vrgba
+    writeBMP "voro.bmp" voronoibmp
